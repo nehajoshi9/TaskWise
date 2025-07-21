@@ -50,7 +50,7 @@ narbhacks-main/
 
 ## Getting Started
 
-# Try out the web application here: https://task-wise-webapp-71tmaxju6-neha-joshis-projects-ea3e486c.vercel.app/
+### Try out the web application here: https://task-wise-webapp-71tmaxju6-neha-joshis-projects-ea3e486c.vercel.app/
 
 OR do the following:
 
