@@ -597,3 +597,22 @@ export const deleteCategory = mutation({
     }
   },
 });
+
+export const removeTag = mutation({
+  args: {
+    taskId: v.id("tasks"),
+    tag: v.string(),
+  },
+  handler: async (ctx, { taskId, tag }) => {
+    const userId = await getUserId(ctx);
+    if (!userId) {
+      throw new Error("Not authenticated");
+    }
+    const task = await ctx.db.get(taskId);
+    if (!task || task.userId !== userId) {
+      throw new Error("Task not found");
+    }
+    const newTags = (task.tags || []).filter((t: string) => t !== tag);
+    await ctx.db.patch(taskId, { tags: newTags });
+  },
+});
