@@ -1,6 +1,6 @@
 # TaskWise
 
-**TaskWise** is a full-stack productivity app for managing tasks and notes, featuring a modern web app (Next.js), a mobile app (React Native/Expo), and a Convex backend with AI-powered features.
+**TaskWise** is a full-stack productivity app for managing tasks, featuring a modern web app (Next.js), a mobile app (React Native/Expo), and a Convex backend with AI-powered features.
 
 ---
 
