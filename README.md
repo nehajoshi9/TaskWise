@@ -18,15 +18,15 @@
 
 ## Features
 
-- 📝 **Task Management**: Create, edit, delete, and organize tasks by category, priority, and tags.
-- ⏰ **Focus Mode**: Pomodoro-style timer to help you focus on one task at a time.
-- 🏷️ **Notes**: Add, edit, and delete notes with rich text support.
-- 🔍 **Filtering**: Filter tasks by category, tag, and status.
-- ✅ **Mark as Complete**: Easily mark tasks as complete/incomplete.
-- 🔄 **Sync**: Real-time sync across web and mobile.
-- 🤖 **AI Integration**: (Optional) Use OpenAI for smart suggestions and summaries.
-- 🔒 **Authentication**: Secure login and user management.
-- 🌐 **Cross-Platform**: Web (Next.js) and Mobile (Expo/React Native).
+- **Task Management**: Create, edit, delete, and organize tasks by category, priority, and tags.
+- **Focus Mode**: Pomodoro-style timer to help you focus on one task at a time.
+- **Notes**: Add, edit, and delete notes with rich text support.
+- **Filtering**: Filter tasks by category, tag, and status.
+- **Mark as Complete**: Easily mark tasks as complete/incomplete.
+- **Sync**: Real-time sync across web and mobile.
+- **AI Integration**: (Optional) Use OpenAI for smart suggestions and summaries.
+- **Authentication**: Secure login and user management.
+- **Cross-Platform**: Web (Next.js) and Mobile (Expo/React Native).
 
 ---
 
