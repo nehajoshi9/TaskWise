@@ -52,7 +52,7 @@ export default function TasksPage() {
                          (task.description && task.description.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesCategory = !selectedCategory || task.category === selectedCategory;
     const matchesTag = !selectedTag || (task.tags && task.tags.includes(selectedTag));
-    
+    // Do NOT filter out isProcessing tasks
     return matchesSearch && matchesCategory && matchesTag;
   }) || [];
 
@@ -254,27 +254,32 @@ export default function TasksPage() {
                   <h3 className="text-sm font-semibold text-gray-600 mb-2">Categories:</h3>
                   <div className="flex gap-2 flex-wrap">
                     {categories.map((category) => (
-                      <div key={category} className="flex items-center">
-                        <button
-                          onClick={() => setSelectedCategory(selectedCategory === category ? "" : category)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                            selectedCategory === category
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
-                          }`}
-                        >
-                          {category}
-                        </button>
-                        <button
-                          onClick={() => handleDeleteCategory(category)}
-                          className="ml-1 p-1 text-red-500 hover:text-red-700 transition-colors"
+                      <button
+                        key={category}
+                        onClick={(e) => {
+                          if ((e.target as HTMLElement).closest('.chip-x')) {
+                            handleDeleteCategory(category);
+                          } else {
+                            setSelectedCategory(selectedCategory === category ? "" : category);
+                          }
+                        }}
+                        className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition-colors relative group ${
+                          selectedCategory === category
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
+                        }`}
+                      >
+                        <span>{category}</span>
+                        <span
+                          className="chip-x ml-2 flex items-center justify-center rounded-full transition cursor-pointer hover:bg-blue-700/30"
+                          onClick={e => { e.stopPropagation(); handleDeleteCategory(category); }}
                           title="Delete category"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className={`w-4 h-4 ${selectedCategory === category ? 'text-white' : 'text-gray-400 group-hover:text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
-                        </button>
-                      </div>
+                        </span>
+                      </button>
                     ))}
                     {showAddCategory ? (
                       <div className="flex items-center gap-2">
@@ -321,27 +326,32 @@ export default function TasksPage() {
                   <h3 className="text-sm font-semibold text-gray-600 mb-2">Tags:</h3>
                   <div className="flex gap-2 flex-wrap">
                     {tags.map((tag) => (
-                      <div key={tag} className="flex items-center">
-                        <button
-                          onClick={() => setSelectedTag(selectedTag === tag ? "" : tag)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                            selectedTag === tag
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
-                          }`}
-                        >
-                          {tag}
-                        </button>
-                        <button
-                          onClick={() => handleDeleteTag(tag)}
-                          className="ml-1 p-1 text-red-500 hover:text-red-700 transition-colors"
+                      <button
+                        key={tag}
+                        onClick={(e) => {
+                          if ((e.target as HTMLElement).closest('.chip-x')) {
+                            handleDeleteTag(tag);
+                          } else {
+                            setSelectedTag(selectedTag === tag ? "" : tag);
+                          }
+                        }}
+                        className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium transition-colors relative group ${
+                          selectedTag === tag
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
+                        }`}
+                      >
+                        <span>{tag}</span>
+                        <span
+                          className="chip-x ml-2 flex items-center justify-center rounded-full transition cursor-pointer hover:bg-blue-700/30"
+                          onClick={e => { e.stopPropagation(); handleDeleteTag(tag); }}
                           title="Delete tag"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className={`w-4 h-4 ${selectedTag === tag ? 'text-white' : 'text-gray-400 group-hover:text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
-                        </button>
-                      </div>
+                        </span>
+                      </button>
                     ))}
                     {showAddTag ? (
                       <div className="flex items-center gap-2">
@@ -399,7 +409,7 @@ export default function TasksPage() {
                         onClick={() => setSelectedDueDateFilter(selectedDueDateFilter === filter.value ? "" : filter.value)}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                           selectedDueDateFilter === filter.value
-                            ? "bg-red-600 text-white"
+                            ? "bg-blue-600 text-white"
                             : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
                         }`}
                       >

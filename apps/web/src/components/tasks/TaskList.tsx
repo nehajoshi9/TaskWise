@@ -6,6 +6,7 @@ import { useMutation } from "convex/react";
 import { CheckCircleIcon, XMarkIcon, ClockIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { FiClock, FiX } from "react-icons/fi";
 import EditTask from "./EditTask";
+import { X } from "lucide-react";
 
 interface Task {
   _id: string;
@@ -30,6 +31,7 @@ export default function TaskList({ tasks }: TaskListProps) {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const updateTaskStatus = useMutation(api.tasks.updateTaskStatus);
   const deleteTask = useMutation(api.tasks.deleteTask);
+  const removeTag = useMutation(api.tasks.removeTag); // Add this mutation if it exists
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -160,7 +162,7 @@ export default function TaskList({ tasks }: TaskListProps) {
             ) : (
               <>
                 {task.category && (
-                  <span className="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded-lg font-medium">
+                  <span className="inline-flex items-center rounded-full text-xs font-medium px-3 py-1 bg-blue-100 text-blue-800">
                     {task.category}
                   </span>
                 )}
@@ -171,7 +173,7 @@ export default function TaskList({ tasks }: TaskListProps) {
                   </div>
                 )}
                 {task.dueDate && (
-                  <div className="flex items-center gap-1 px-2 py-1 bg-red-100 text-red-700 text-xs rounded-lg">
+                  <div className="flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-lg">
                     <ClockIcon className="h-3 w-3" />
                     <span>
                       Due: {task.dueDateTime 
@@ -183,17 +185,29 @@ export default function TaskList({ tasks }: TaskListProps) {
                 )}
                 {task.tags && task.tags.length > 0 && (
                   <div className="flex items-center gap-1">
-                    {task.tags.slice(0, 2).map((tag: string, index: number) => (
+                    {task.tags.map((tag: string, index: number) => (
                       <span
                         key={index}
-                        className="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-lg"
+                        className="inline-flex items-center rounded-full text-xs font-medium transition-colors group px-3 py-1 bg-blue-100 text-blue-800 hover:bg-blue-200"
                       >
                         {tag}
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              await removeTag({ taskId: task._id, tag });
+                            } catch (error) {
+                              console.error('Error removing tag:', error);
+                            }
+                          }}
+                          className="ml-1 flex items-center justify-center rounded-full focus:outline-none w-4 h-4 opacity-60 group-hover:opacity-100 hover:bg-blue-200 transition"
+                          style={{ fontSize: 10 }}
+                          aria-label={`Remove tag ${tag}`}
+                        >
+                          <X size={10} className="text-blue-500" />
+                        </button>
                       </span>
                     ))}
-                    {task.tags.length > 2 && (
-                      <span className="text-xs text-gray-500">+{task.tags.length - 2}</span>
-                    )}
                   </div>
                 )}
               </>

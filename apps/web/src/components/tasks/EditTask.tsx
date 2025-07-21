@@ -7,6 +7,8 @@ import { Id } from "@packages/backend/convex/_generated/dataModel";
 import { Button } from "../common/button";
 import { X, Save, Clock, Tag, FileText, Calendar, Plus } from "lucide-react";
 import clsx from "clsx";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface EditTaskProps {
   taskId: Id<"tasks">;
@@ -66,7 +68,7 @@ export default function EditTask({ taskId, initialData, onClose, onSave }: EditT
   const [newTag, setNewTag] = useState("");
 
   const handleInputChange = (field: string, value: string | number) => {
-    setFormData(prev => ({
+    setFormData((prev: typeof formData) => ({
       ...prev,
       [field]: value
     }));
@@ -74,7 +76,7 @@ export default function EditTask({ taskId, initialData, onClose, onSave }: EditT
 
   const handleAddTag = () => {
     if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
-      setFormData(prev => ({
+      setFormData((prev: typeof formData) => ({
         ...prev,
         tags: [...prev.tags, newTag.trim()]
       }));
@@ -83,9 +85,9 @@ export default function EditTask({ taskId, initialData, onClose, onSave }: EditT
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setFormData(prev => ({
+    setFormData((prev: typeof formData) => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      tags: prev.tags.filter((tag: string) => tag !== tagToRemove)
     }));
   };
 
@@ -272,78 +274,30 @@ export default function EditTask({ taskId, initialData, onClose, onSave }: EditT
             </select>
           </div>
 
-          {/* Due Date */}
+          {/* Due Date & Time (with react-datepicker) */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Due Date
+              Due Date & Time
             </label>
-            <div className="relative flex items-center">
-              <button
-                type="button"
-                className={`w-full flex items-center justify-between px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${formData.dueDate ? 'border-gray-300 bg-white text-gray-900' : 'border-gray-300 bg-gray-50 text-gray-400'}`}
-                onClick={() => document.getElementById('edit-task-date-input')?.click()}
-              >
-                <span>{formData.dueDate ? new Date(formData.dueDate).toLocaleDateString() : 'Select date'}</span>
-                {formData.dueDate && (
-                  <span
-                    className="ml-2 text-gray-400 hover:text-red-500 cursor-pointer"
-                    onClick={e => { e.stopPropagation(); handleInputChange('dueDate', ''); handleInputChange('dueDateTime', ''); }}
-                    title="Clear date"
-                  >
-                    <X size={16} />
-                  </span>
-                )}
-              </button>
-              <input
-                id="edit-task-date-input"
-                type="date"
-                value={formData.dueDate}
-                onChange={e => handleInputChange('dueDate', e.target.value)}
-                className="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer"
-                tabIndex={-1}
-              />
-            </div>
-          </div>
-
-          {/* Due Time */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Due Time
-            </label>
-            <div className="relative flex items-center">
-              <button
-                type="button"
-                className={`w-full flex items-center justify-between px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${formData.dueDateTime ? 'border-gray-300 bg-white text-gray-900' : 'border-gray-300 bg-gray-50 text-gray-400'}`}
-                onClick={() => document.getElementById('edit-task-time-input')?.click()}
-                disabled={!formData.dueDate}
-                title={formData.dueDate ? '' : 'Select a date first'}
-              >
-                <span>{formData.dueDateTime ? formData.dueDateTime.split('T')[1]?.substring(0, 5) : 'Select time'}</span>
-                {formData.dueDateTime && (
-                  <span
-                    className="ml-2 text-gray-400 hover:text-red-500 cursor-pointer"
-                    onClick={e => { e.stopPropagation(); handleInputChange('dueDateTime', ''); }}
-                    title="Clear time"
-                  >
-                    <X size={16} />
-                  </span>
-                )}
-              </button>
-              <input
-                id="edit-task-time-input"
-                type="time"
-                value={formData.dueDateTime ? formData.dueDateTime.split('T')[1]?.substring(0, 5) : ''}
-                onChange={e => {
-                  const date = formData.dueDate || new Date().toISOString().split('T')[0];
-                  const time = e.target.value;
-                  const dateTime = `${date}T${time}:00`;
-                  handleInputChange('dueDateTime', dateTime);
-                }}
-                className="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer"
-                tabIndex={-1}
-                disabled={!formData.dueDate}
-              />
-            </div>
+            <ReactDatePicker
+              selected={formData.dueDateTime ? new Date(formData.dueDateTime) : null}
+              onChange={date => {
+                if (date) {
+                  handleInputChange('dueDate', date.toISOString().split('T')[0]);
+                  handleInputChange('dueDateTime', date.toISOString());
+                } else {
+                  handleInputChange('dueDate', '');
+                  handleInputChange('dueDateTime', '');
+                }
+              }}
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              dateFormat="yyyy-MM-dd h:mm aa"
+              placeholderText="Select date and time"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              isClearable
+            />
           </div>
 
           {/* Estimated Time */}
@@ -366,30 +320,23 @@ export default function EditTask({ taskId, initialData, onClose, onSave }: EditT
               Tags
             </label>
             <div className="flex flex-wrap gap-2 mb-3">
-              {formData.tags.map((tag, index) => (
+              {formData.tags.map((tag: string, index: number) => (
                 <span
                   key={index}
                   className={clsx(
-                    "inline-flex items-center rounded-full text-sm font-medium transition-colors",
-                    "px-3 py-1",
-                    formData.tags.includes(tag)
-                      ? "bg-blue-600 text-white"
-                      : "bg-blue-100 text-blue-800"
+                    "inline-flex items-center rounded-full text-sm font-medium transition-colors group",
+                    "px-3 py-1 bg-blue-100 text-blue-800 hover:bg-blue-200",
                   )}
                 >
                   {tag}
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className={clsx(
-                      "ml-1 flex items-center justify-center rounded-full focus:outline-none",
-                      formData.tags.includes(tag)
-                        ? "bg-blue-500 hover:bg-blue-700"
-                        : "bg-blue-200 hover:bg-blue-300"
-                    )}
-                    style={{ width: 18, height: 18 }}
+                    className="ml-1 flex items-center justify-center rounded-full focus:outline-none w-5 h-5 opacity-60 group-hover:opacity-100 hover:bg-blue-200 transition"
+                    style={{ fontSize: 12 }}
+                    aria-label={`Remove tag ${tag}`}
                   >
-                    <X size={12} className={formData.tags.includes(tag) ? "text-white" : "text-gray-500"} />
+                    <X size={12} className="text-blue-500" />
                   </button>
                 </span>
               ))}
@@ -407,7 +354,7 @@ export default function EditTask({ taskId, initialData, onClose, onSave }: EditT
                 type="button"
                 onClick={handleAddTag}
                 disabled={!newTag.trim()}
-                className="px-4 py-2"
+                className="px-5 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 flex items-center gap-2"
               >
                 Add
               </Button>
@@ -427,7 +374,7 @@ export default function EditTask({ taskId, initialData, onClose, onSave }: EditT
             <Button
               type="submit"
               disabled={isLoading || !formData.title.trim()}
-              className="flex items-center gap-2"
+              className="px-5 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 flex items-center gap-2"
             >
               <Save size={16} />
               {isLoading ? "Saving..." : "Save Changes"}

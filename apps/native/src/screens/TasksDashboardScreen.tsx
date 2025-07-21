@@ -132,6 +132,7 @@ export default function TasksDashboardScreen({ navigation }) {
                          task.description?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "All" || task.category === selectedCategory;
     const matchesTag = selectedTag === "All" || (task.tags && task.tags.includes(selectedTag));
+    // Do NOT filter out isProcessing tasks; show all
     return matchesSearch && matchesCategory && matchesTag;
   }) || [];
 
@@ -995,7 +996,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   addChipText: {
-    color: "#007AFF",
+    //color: "#007AFF",
     fontSize: RFValue(12),
     fontWeight: "500",
   },

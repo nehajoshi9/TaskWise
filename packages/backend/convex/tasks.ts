@@ -207,7 +207,7 @@ export const processTaskWithAI = internalAction({
           },
           { role: "user", content: prompt },
         ],
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         response_format: { type: "json_object" },
         temperature: 0.1,
       });
