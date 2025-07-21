@@ -28,11 +28,18 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 .env
+.env.*
+*.env
+*.env.*
+.env.local
+.env.production
+.env.development
+.env.test
+# Convex/Clerk/Expo/Next/other config
+apps/web/.env*
+apps/native/.env*
+packages/backend/.env*
 
 # turbo
 .turbo
