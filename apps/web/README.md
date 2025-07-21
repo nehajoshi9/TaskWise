@@ -50,6 +50,10 @@ narbhacks-main/
 
 ## Getting Started
 
+### Try it out here: https://task-wise-webapp-71tmaxju6-neha-joshis-projects-ea3e486c.vercel.app/
+
+OR
+
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) (v18+ recommended)
