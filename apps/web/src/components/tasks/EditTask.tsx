@@ -104,7 +104,6 @@ export default function EditTask({ taskId, initialData, onClose, onSave }: EditT
         dueDate: formData.dueDate || undefined,
         dueDateTime: formData.dueDateTime || undefined,
         tags: formData.tags,
-        status: formData.status,
       });
       onSave();
     } catch (error) {

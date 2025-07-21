@@ -11,11 +11,11 @@ export default function Home() {
   return (
     <main>
       <Header />
-      <Hero containerClass="px-2 sm:px-4" />
-      <Benefits containerClass="px-2 sm:px-4" />
+      <Hero />
+      <Benefits />
       {/* <Testimonials /> */}
-      <FooterHero containerClass="px-2 sm:px-4" />
-      <Footer containerClass="px-2 sm:px-4" />
+      <FooterHero />
+      <Footer />
     </main>
   );
 }

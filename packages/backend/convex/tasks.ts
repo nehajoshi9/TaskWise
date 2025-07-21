@@ -351,14 +351,18 @@ export const getTasks = query({
     status: v.optional(v.string()),
     category: v.optional(v.string()),
     dueDateFilter: v.optional(v.string()), // "overdue", "today", "tomorrow", "this-week", "next-week"
+    userId: v.optional(v.string()),
   },
-  handler: async (ctx, { status, category, dueDateFilter }) => {
-    const userId = await getUserId(ctx);
-    if (!userId) {
+  handler: async (ctx, { status, category, dueDateFilter, userId }) => {
+    let effectiveUserId = userId;
+    if (!effectiveUserId) {
+      effectiveUserId = await getUserId(ctx);
+    }
+    if (!effectiveUserId) {
       return [];
     }
 
-    let query = ctx.db.query("tasks").filter((q) => q.eq(q.field("userId"), userId));
+    let query = ctx.db.query("tasks").filter((q) => q.eq(q.field("userId"), effectiveUserId));
 
     if (status) {
       query = query.filter((q) => q.eq(q.field("status"), status));

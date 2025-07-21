@@ -202,7 +202,7 @@ export default function TasksDashboardScreen({ navigation }) {
             onPress={() => navigation.navigate('EditTask', { taskId: item._id })}
             style={styles.editButton}
           >
-            <Feather name="edit-2" size={16} color="#666" />
+            <Feather name="edit-2" size={20} color="#666" />
           </TouchableOpacity>
           {/* Focus and check only if not completed */}
           {item.status !== "Completed" && (
@@ -211,7 +211,7 @@ export default function TasksDashboardScreen({ navigation }) {
                 onPress={() => navigation.navigate('FocusMode', { task: item })}
                 style={styles.focusTaskButton}
               >
-                <Ionicons name="timer-outline" size={16} color="#007AFF" />
+                <Ionicons name="timer-outline" size={27} color="#007AFF" />
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleStatusChange(item._id, item.status === "Completed" ? "Pending" : "Completed")}
@@ -231,7 +231,7 @@ export default function TasksDashboardScreen({ navigation }) {
             onPress={() => handleDeleteTask(item._id)}
             style={styles.deleteButton}
           >
-            <Feather name="trash-2" size={16} color="#FF6B6B" />
+            <Feather name="trash-2" size={22} color="#FF6B6B" />
           </TouchableOpacity>
         </View>
       </View>
